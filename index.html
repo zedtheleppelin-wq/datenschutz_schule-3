@@ -1961,8 +1961,8 @@ body.intro-on .logo{height:clamp(3rem,7vw,4.6rem)}
     dots.forEach((d, k) => { if (k === ts) d.setAttribute('aria-current', 'step'); else d.removeAttribute('aria-current'); });
   }
   dots.forEach((d, k) => d.addEventListener('click', () => tut(k)));
-  $$('[data-next]').forEach(b => b.addEventListener('click', () => { tut(ts + 1); $('#tutProg').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
-  $$('[data-prev]').forEach(b => b.addEventListener('click', () => { tut(ts - 1); $('#tutProg').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+  $$('[data-next]').forEach(b => b.addEventListener('click', () => { tut(ts + 1); toTop(); }));
+  $$('[data-prev]').forEach(b => b.addEventListener('click', () => { tut(ts - 1); toTop(); }));
   tut(0);
 
   /* Mini-Test */
