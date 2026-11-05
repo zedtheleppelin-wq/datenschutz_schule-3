@@ -1885,10 +1885,19 @@ body.intro-on .logo{height:clamp(3rem,7vw,4.6rem)}
       panels[k].classList.remove('on');
     });
     requestAnimationFrame(() => requestAnimationFrame(() => panels[i].classList.add('on')));
-    tabs[i].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    const tl = tabs[i].parentElement;
+    if (tl && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = tabs[i].offsetLeft - (tl.clientWidth - tabs[i].offsetWidth) / 2;
     if (focus) tabs[i].focus();
     history.replaceState(null, '', '#' + ids[i]);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    toTop();
+  }
+  function toTop() {
+    const r = document.documentElement, old = r.style.scrollBehavior;
+    r.style.scrollBehavior = 'auto';
+    const go = () => { window.scrollTo(0, 0); r.scrollTop = 0; document.body.scrollTop = 0; };
+    go();
+    requestAnimationFrame(() => { go(); requestAnimationFrame(() => { go(); r.style.scrollBehavior = old; }); });
+    setTimeout(go, 120);
   }
 
   tabs.forEach((t, i) => {
@@ -1908,7 +1917,7 @@ body.intro-on .logo{height:clamp(3rem,7vw,4.6rem)}
 
   const h = ids.indexOf(location.hash.slice(1));
   if (h < 0) document.body.classList.add('intro-on');
-  $('#introGo').addEventListener('click', () => { document.body.classList.remove('intro-on'); window.scrollTo({ top: 0, behavior: 'instant' }); });
+  $('#introGo').addEventListener('click', () => { document.body.classList.remove('intro-on'); toTop(); });
   show(h >= 0 ? h : ids.indexOf('tut'));
   addEventListener('hashchange', () => { const k = ids.indexOf(location.hash.slice(1)); if (k >= 0) show(k); });
 
